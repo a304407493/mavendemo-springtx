@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		"
+	default-lazy-init="true">
+<!-- 1.方式1配置 性能拦截器或代理或切面 -->
+	<!--1.1.拦截器
+	<bean id="performanceMonitor" class="javacommon.aop.PerformanceMonitorInterceptor">
+		<property name="threshold">
+			<value>500</value>
+		</property>
+	</bean>
+	-->
+	<!--1.2.拦截器代理内容
+	<bean id="serviceProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		拦截或代理目标
+        <property name="beanNames">
+            <list>
+                <value>*Service</value>
+            </list>
+        </property>
+        拦截或代理器列表
+        <property name="interceptorNames">
+            <list>
+                <value>performanceMonitor</value>
+            </list>
+        </property>
+	</bean>
+	 -->
+<!-- 2.方式2配置 自动代理的拦截方式和切面(处理方法) -->
+	<!-- 2.1.切面 -->
+	<!--
+	<bean id="performanceMonitor" class="javacommon.aop.PerformanceMonitorInterceptor">
+		<property name="threshold">
+			<value>500</value>
+		</property>
+	</bean>
+	 -->
+	<!-- 2.4.总结配置切面和接入点-->
+	<!--
+	<aop:config>
+		2.2.配置切入点
+        <aop:pointcut id="pointcut" expression="execution(* com.mavendemo..*.*(..))"/>
+        2.3.配置上面的切面和切入点
+        <aop:advisor pointcut-ref="pointcut" advice-ref="performanceMonitor"/>
+    </aop:config>
+     -->
+<!-- 3.方式3是2的注解方式 -->
+	<!-- 2.1.切面 -->
+	<!--
+	<bean id="performanceMonitor" class="javacommon.aop.PerformanceMonitorInterceptor">
+		<property name="threshold">
+			<value>500</value>
+		</property>
+	</bean>
+	 -->
+	<!-- 2.2.切面和接入点 -->
+	<aop:aspectj-autoproxy />
+</beans>

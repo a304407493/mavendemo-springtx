@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0"
+>
+<!-- 1.配置项目名称 -->
+	<display-name>mavendemo-springtx</display-name>
+<!-- 2.配置 Spring监听器 -->
+	<!-- 2.1.监听器 -->
+	<listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  	</listener>
+  	<!-- 2.2.监听器要监听的文件位置 -->
+  	<context-param>
+      	<param-name>contextConfigLocation</param-name>
+      	<param-value>classpath:applicationContext.xml</param-value>
+  	</context-param>
+<!-- 3.配置过滤器 -->
+  	<!-- 3.1.编码过滤器CharacterEncodingFilter,控制web项目编码 -->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 3.2.性能过滤器LoggerMDCFilter,存放在MDC中的数据，log4j可以直接引用并作为日志信息打印出来. -->
+	<filter>
+		<filter-name>LoggerMDCFilter</filter-name>
+		<filter-class>javacommon.filter.LoggerMDCFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoggerMDCFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+<!-- 4.配置 Servlet -->
+	<servlet>
+		<servlet-name>AppServlet</servlet-name>
+		<servlet-class>com.mavendemo.springtx.AppServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AppServlet</servlet-name>
+		<url-pattern>/AppServlet</url-pattern>
+	</servlet-mapping>
+<!-- 5.配置springmvc -->
+	<!-- 5.1.配置servlet -->
+	<servlet>
+	    <servlet-name>spring</servlet-name>
+	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	    <!-- 可以自定义servlet.xml配置文件的位置和名称，默认为WEB-INF目录下，名称为[<servlet-name>]-servlet.xml，如spring-servlet.xml-->
+	    <!-- 备注：通过web.xml加载不通过spring的applicationContext.xml加载 -->
+	    <init-param>
+	        <param-name>contextConfigLocation</param-name>
+	        <param-value>classpath:spring-servlet.xml</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- 5.2.配置拦截的url -->
+	<servlet-mapping>
+	    <servlet-name>spring</servlet-name>
+	    <url-pattern>/</url-pattern>
+	</servlet-mapping>
+<!-- 5.配置druid -->
+	<filter>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+       	<init-param>
+			<param-name>exclusions</param-name>
+           	<param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+       	</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>DruidWebStatFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 配置 druid的监控页面为druid -->
+  	<servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <!-- 选择配置项 允许清空统计数据 -->
+        <init-param>
+		    <param-name>resetEnable</param-name>
+		    <param-value>true</param-value>
+	    </init-param>
+	    <!-- 选择配置项 设置用户名 -->
+	    <init-param>
+		    <param-name>loginUsername</param-name>
+		    <param-value>druid</param-value>
+	    </init-param>
+	    <!-- 选择配置项 设置密码 -->
+	    <init-param>
+		    <param-name>loginPassword</param-name>
+		    <param-value>druid</param-value>
+	    </init-param>
+	    <!-- 选择配置项 允许访问的ip 24表示，前面24位是子网掩码，比对的时候，前面24位相同就匹配。 -->
+		<init-param>
+	        <param-name>allow</param-name>
+	        <param-value>128.242.127.1/24,128.242.128.1,127.0.0.1</param-value>
+	    </init-param>
+	    <!-- 选择配置项 拒绝访问的ip 优先允许 -->
+	    <init-param>
+	        <param-name>deny</param-name>
+	        <param-value>127.0.0.1/128.242.127.4</param-value>
+	    </init-param>
+	    <!-- 选择配置项 重置统计信息功能false为不显示似乎没啥作用    -->
+	    <init-param>
+	        <param-name>resetEnable</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+    </servlet>
+    <!-- http://localhost:8888/mavendemo-springtx/druid/login.html -->
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+</web-app>

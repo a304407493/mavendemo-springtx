@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		"
+	default-lazy-init="true">
+<!-- 配置 Mybatis  -->
+	<!-- 1.配置sqlSessionFactory -->
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<!-- 1.配置 数据源 -->
+			<property name="dataSource" ref="dataSource" />
+			<!-- 2.配置 基本配置文件 -->
+			<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+			<!-- 3.配置 显式指定Mapper文件位置 -->
+			<!-- <property name="mapperLocations" value="classpath:mybatis/UserMapper.xml" /> -->
+		</bean>
+
+	<!-- 2.配置dao或mapper通过注入sqlSessionFactory生成 -->
+		<!-- 方式1：通过配置方式，缺点太多配置
+		<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	     	<property name="mapperInterface" value="com.mavendemo.springtx.dao.UserMapper"></property>
+	     	<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+		</bean>
+		-->
+		<!-- 方式2：通过自动扫描方式 -->
+		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+			<property name="basePackage" value="com.mavendemo.springtx.dao" />
+			<!-- sqlSessionFactory属性也可以不用指定，默认会以Autowired方式注入
+			<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+			-->
+		</bean>
+</beans>

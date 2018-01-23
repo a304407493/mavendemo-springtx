@@ -1,0 +1,1 @@
+INSERT INTO yourdb.person (name, password) VALUES ('zhaiyz', "Hello, world!");

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<!-- 1.设置mysql驱动路径 -->
+	<classPathEntry location="src/main/resources/mybatis-generator/mysql-connector-java-5.0.8.jar" />
+	<!-- <classPathEntry location="./mysql-connector-java-5.0.8-bin.jar" /> -->
+<!-- 2.此处指定生成针对MyBatis3的DAO 标识为context1 -->
+	<context id="context1"  targetRuntime="MyBatis3">
+		<!-- 2.1.jdbc连接信息 -->
+			<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/test" userId="root" password="admin" />
+	  	<!-- 2.2.生成vo对象 -->
+	    	<javaModelGenerator targetPackage="com.mavendemo.mybatis.vo" targetProject="src/main/java" />
+	  	<!-- 2.3.生成用于查询的Example对象 -->
+	    	<sqlMapGenerator targetPackage="com.mavendemo.mybatis.vo" targetProject="src/main/java" />
+	  	<!-- 2.4.生成DAO的类文件以及配置文件 -->
+	    	<javaClientGenerator targetPackage="com.mavendemo.mybatis.dao" targetProject="src/main/java" type="XMLMAPPER" />
+	  	<!-- 2.5.想要生成的数据库表,自动化工具会根据该表的结构生成相应的vo对象 一般可以省略 -->
+	    	<table schema="" tableName="user" ></table>
+  </context>
+</generatorConfiguration>

@@ -1,2 +1,5 @@
 /.classpath
 /.project
+/hs_err_pid18568.log
+/target/
+/mavendemo-springmvc.iml
